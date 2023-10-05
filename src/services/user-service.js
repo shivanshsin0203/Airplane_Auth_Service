@@ -1,6 +1,7 @@
 const UserRepository=require('../repository/user-repository');
 const {JWT_KEY}=require("../config/serverConfig");
 const jwt=require('jsonwebtoken');
+const bcrypt=require('bcrypt');
 const e = require('express');
 class UserService{
     constructor(){
@@ -34,6 +35,31 @@ class UserService{
         }
         catch(error){
             console.log("Something went wrong in verifcation of token in Service");
+            throw error;
+        }
+    }
+    async signIn(email,plainPassword){
+           try{
+            const user=await this.userRepository.getByEmail(email);
+            const passwordmatch=this.checkPassword(plainPassword,user.password);
+            if(!passwordmatch){
+                console.log("Password Not Match");
+                throw {error:"Password Not Match"}
+            }
+            const new_Token=this.createToken({email:user.email,id:user.id});
+            return new_Token;
+           }
+           catch(error){
+            console.log("Error in Service");
+            throw error;
+           }
+    }
+    checkPassword(userInputPassword,encryptedPassword){
+        try{
+           return bcrypt.compareSync(userInputPassword,encryptedPassword);
+        }
+        catch(error){
+            console.log("Something went wrong in serivce in Password Check");
             throw error;
         }
     }
