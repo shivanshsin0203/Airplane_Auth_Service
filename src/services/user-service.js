@@ -63,5 +63,22 @@ class UserService{
             throw error;
         }
     }
+    async isAuthenticated(token){
+        try{
+        const isTokenVerfied= this.verifyToken(token);
+        if(!isTokenVerfied){
+            console.log("Token Not verified")
+        }
+        const user=this.userRepository.getById(isTokenVerfied.id);
+         if(!user){
+            throw {error:"No such user"}
+         }
+         return user.id;    
+    }
+        catch(error){
+            console.log("Something went wrong in serivce in Password Check");
+            throw error;
+        }
+    }
 }
 module.exports=UserService;
