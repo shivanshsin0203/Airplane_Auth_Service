@@ -1,4 +1,5 @@
 const {User}=require('../models/index');
+
 class UserRepository{
     async create(data){
         try{
@@ -25,5 +26,17 @@ class UserRepository{
             throw error
         }
     }
+    async getById(userId){
+        try{
+          const user= await User.findByPk(userId,{
+            attributes:['email','id'],
+          })
+        }
+        catch(error){
+            console.log("An error in User Repository");
+            throw error
+        }
+    }
+    
 }
 module.exports=UserRepository;
