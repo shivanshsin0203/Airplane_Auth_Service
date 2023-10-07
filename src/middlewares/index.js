@@ -1,3 +1,4 @@
 module.exports={
-    AuthRequestValidation:require("./auth-request-validators")
+    AuthRequestValidation:require("./auth-request-validators"),
+   
 }
